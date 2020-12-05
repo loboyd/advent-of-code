@@ -27,6 +27,69 @@ def sol1(data):
 
     return ct
 
+def isDigit(x):
+    return x in '0987123465'
+
+def isHex(x):
+    return isDigit(x) or x in 'abcdef'
+
+def byrValid(byr):
+    return len(byr) == 4 and 1920 <= int(byr) <= 2002
+
+def iyrValid(iyr):
+    return len(iyr) == 4 and 2010 <= int(iyr) <= 2020
+
+def eyrValid(eyr):
+    return len(eyr) == 4 and 2020 <= int(eyr) <= 2030
+
+def hgtValid(hgt):
+    units = hgt[-2:]
+    hgt = hgt[:-2]
+    if units == 'in':
+        if len(hgt) == 2 and isDigit(hgt[0]) and isDigit(hgt[1]):
+            if 59 <= int(hgt) <= 76:
+                return True
+    elif units == 'cm':
+        if len(hgt) == 3 and isDigit(hgt[0]) and isDigit(hgt[1]) and isDigit(hgt[2]):
+            if 150 <= int(hgt) <= 193:
+                return True
+    return False
+
+def hclValid(hcl):
+    return (
+        len(hcl) == 7 and
+        hcl[0] == '#' and
+        isHex(hcl[1]) and 
+        isHex(hcl[2]) and 
+        isHex(hcl[3]) and 
+        isHex(hcl[4]) and 
+        isHex(hcl[5]) and 
+        isHex(hcl[6])
+    )
+
+def eclValid(ecl):
+    return (
+        ecl == 'amb' or
+        ecl == 'blu' or
+        ecl == 'brn' or
+        ecl == 'gry' or
+        ecl == 'grn' or
+        ecl == 'hzl' or
+        ecl == 'oth'
+    )
+
+def pidValid(pid):
+    return (
+        len(pid) == 9   and
+        isDigit(pid[1]) and 
+        isDigit(pid[2]) and 
+        isDigit(pid[3]) and 
+        isDigit(pid[4]) and 
+        isDigit(pid[5]) and 
+        isDigit(pid[6]) and 
+        isDigit(pid[7]) and 
+        isDigit(pid[8])
+    )
 
 def sol2(data):
     ct = 0
@@ -40,103 +103,15 @@ def sol2(data):
             keys[key] = value
 
         if (
-            'byr' not in keys or
-            'iyr' not in keys or
-            'eyr' not in keys or
-            'hgt' not in keys or
-            'hcl' not in keys or
-            'ecl' not in keys or
-            'pid' not in keys
+            'byr' in keys and byrValid(keys['byr']) and
+            'iyr' in keys and iyrValid(keys['iyr']) and
+            'eyr' in keys and eyrValid(keys['eyr']) and
+            'hgt' in keys and hgtValid(keys['hgt']) and
+            'hcl' in keys and hclValid(keys['hcl']) and
+            'ecl' in keys and eclValid(keys['ecl']) and
+            'pid' in keys and pidValid(keys['pid'])
         ):
-            print('missing keys')
-            continue
-
-        byr = keys['byr']
-        if len(byr) != 4:
-            print('bad byr length')
-            continue
-
-        if int(byr) < 1920 or int(byr) > 2002:
-            print('bad byr')
-            continue
-
-        iyr = keys['iyr']
-        if len(iyr) != 4:
-            print('bad iyr length')
-            continue
-
-        if int(iyr) < 2010 or int(iyr) > 2020:
-            print('bad iyr')
-            continue
-
-        eyr = keys['eyr']
-        if len(eyr) != 4:
-            print('bad eyr length')
-            continue
-
-        if int(eyr) < 2020 or int(eyr) > 2030:
-            print('bad eyr')
-            continue
-
-        hgt = keys['hgt']
-        units = hgt[-2:]
-        hgt = int(hgt[:-2])
-        if units != 'cm' and units != 'in':
-            print('bad unit')
-            continue
-        if units == 'cm' and (hgt < 150 or hgt > 193):
-            print('bad height')
-            continue
-        if units == 'in' and (hgt < 59 or hgt > 76):
-            print('bad height')
-            continue
-
-        hcl = keys['hcl']
-        if hcl[0] != '#':
-            print('bad color hash')
-            continue
-
-        if len(hcl) != 7:
-            print('bad hcl length')
-            continue
-
-        bad = False
-        for c in hcl[1:]:
-            if c not in '1234567890abcdef':
-                bad = True
-                break
-        if bad:
-            bad = False
-            print('bad color char')
-            continue
-
-        ecl = keys['ecl']
-        if (
-            ecl != 'amb' and
-            ecl != 'blu' and
-            ecl != 'gry' and
-            ecl != 'grn' and
-            ecl != 'hzl' and
-            ecl != 'oth'
-        ):
-            print('bad ecl')
-            continue
-
-        pid = keys['pid']
-        if len(pid) != 9:
-            print('bad pid length')
-            continue
-
-        bad = False
-        for c in pid:
-            if c not in '1234567890':
-                break
-        if bad:
-            bad = True
-            print('bad pid char')
-            continue
-
-        ct += 1
+            ct += 1
 
     return ct
 

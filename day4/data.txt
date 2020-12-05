@@ -1,6 +1,7 @@
-yr:2017 hgt:160cm
+byr:1971
+iyr:2017 hgt:160cm
 eyr:2020 ecl:hzl
-pid:157096267
+pid:157096268
 
 hgt:183cm
 pid:368895060
